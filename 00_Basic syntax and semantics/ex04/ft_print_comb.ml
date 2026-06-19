@@ -1,8 +1,8 @@
 let ft_print_comb () =
-  let rec loop a =
-    if a <= 7 then
+  let rec loop_a a =
+    if a <= 7 then begin
       let rec loop_b b =
-        if b <= 8 then
+        if b <= 8 then begin
           let rec loop_c c =
             if c <= 9 then begin
               if a < b && b < c then begin
@@ -17,12 +17,15 @@ let ft_print_comb () =
           in
           loop_c (b + 1);
           loop_b (b + 1)
+        end
       in
       loop_b (a + 1);
-      loop a (a + 1)
+      loop_a (a + 1)
+    end
   in
-  loop 0;
+  loop_a 0;
   print_char '\n'
 
 let () =
   ft_print_comb ()
+  
