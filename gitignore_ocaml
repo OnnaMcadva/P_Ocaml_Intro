@@ -1,0 +1,21 @@
+# Compiled OCaml files
+*.cmo
+*.cmi
+*.cmx
+*.cmxa
+*.cma
+*.cmxs
+*.o
+*.a
+
+# Executables
+a.out
+out
+
+# dune build artifacts
+_build/
+.merlin
+*.install
+
+# opam
+_opam/
