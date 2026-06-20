@@ -7,4 +7,4 @@ let () =
   ft_test_sign 0;
   ft_test_sign (-42)
 
-(* ocamlopt ft_test_sign.ml -o ft_test_sign && ./ft_test_sign *)
+(* ocamlopt ft_test_sign.ml && ./a.out *)
