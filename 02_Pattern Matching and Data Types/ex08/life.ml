@@ -42,12 +42,12 @@ let complementary_helix h =
     in
     { n with nucleobase = base }
   in
-  let rec aux h acc =
+  let rec aux h =
     match h with
-    | [] -> List.rev acc
-    | n :: t -> aux t (complement n :: acc)
+    | [] -> []
+    | n :: t -> complement n :: aux t
   in
-  aux h []
+  aux h
 
 type rna = nucleobase list
 
@@ -55,12 +55,12 @@ let generate_rna h =
   let to_rna_base = function
     | A -> T | T -> U | C -> G | G -> C | _ -> None
   in
-  let rec aux h acc =
+  let rec aux h =
     match h with
-    | [] -> List.rev acc
-    | n :: t -> aux t (to_rna_base n.nucleobase :: acc)
+    | [] -> []
+    | n :: t -> to_rna_base n.nucleobase :: aux t
   in
-  aux h []
+  aux h
 
 type aminoacid =
   | Stop | Ala | Arg | Asn | Asp | Cys | Gln | Glu | Gly | His
@@ -89,9 +89,14 @@ let generate_bases_triplets r =
   let rec aux r acc =
     match r with
     | a :: b :: c :: t -> aux t ((a, b, c) :: acc)
-    | _ -> List.rev acc
+    | _ -> acc
   in
-  aux r []
+  let rec my_rev lst acc =
+    match lst with
+    | [] -> acc
+    | h :: t -> my_rev t (h :: acc)
+  in
+  my_rev (aux r []) []
 
 let decode_triplet = function
   | (U,A,A) | (U,A,G) | (U,G,A) -> Stop
@@ -119,15 +124,23 @@ let decode_triplet = function
 
 let decode_arn r =
   let triplets = generate_bases_triplets r in
-  let rec aux triplets acc =
+  let rec aux triplets =
     match triplets with
-    | [] -> List.rev acc
+    | [] -> []
     | t :: rest ->
       let aa = decode_triplet t in
-      if aa = Stop then List.rev (Stop :: acc)
-      else aux rest (aa :: acc)
+      if aa = Stop then [Stop]
+      else aa :: aux rest
   in
-  aux triplets []
+  aux triplets
+
+let rna_to_string r =
+  let rec aux r acc =
+    match r with
+    | [] -> acc
+    | b :: t -> aux t (acc ^ string_of_nucleobase b)
+  in
+  aux r ""
 
 let life s =
   let n = String.length s in
@@ -137,9 +150,7 @@ let life s =
   let ch = complementary_helix h in
   Printf.printf "2. Complementary: %s\n" (helix_to_string ch);
   let r = generate_rna h in
-  Printf.printf "3. RNA:           ";
-  List.iter (fun b -> print_string (string_of_nucleobase b)) r;
-  print_char '\n';
+  Printf.printf "3. RNA:           %s\n" (rna_to_string r);
   let p = decode_arn r in
   Printf.printf "4. Protein:       %s\n" (string_of_protein p);
   ignore s
