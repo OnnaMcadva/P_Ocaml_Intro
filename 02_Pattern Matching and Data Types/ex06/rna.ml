@@ -1,7 +1,6 @@
 type phosphate = string
 type deoxyribose = string
 type nucleobase = A | T | C | G | U | None
-
 type nucleotide = {
   phosphate : phosphate;
   deoxyribose : deoxyribose;
@@ -10,11 +9,11 @@ type nucleotide = {
 
 let generate_nucleotide c =
   let base = match c with
-    | 'A' -> A
-    | 'T' -> T
-    | 'C' -> C
-    | 'G' -> G
-    | _   -> None
+  | 'A' -> A
+  | 'T' -> T
+  | 'C' -> C
+  | 'G' -> G
+  | _   -> None
   in
   { phosphate = "phosphate"; deoxyribose = "deoxyribose"; nucleobase = base }
 
@@ -47,42 +46,46 @@ let helix_to_string h =
 let complementary_helix h =
   let complement n =
     let base = match n.nucleobase with
-      | A -> T
-      | T -> A
-      | C -> G
-      | G -> C
-      | _ -> None
+    | A -> T
+    | T -> A
+    | C -> G
+    | G -> C
+    | _ -> None
     in
     { n with nucleobase = base }
   in
-  let rec aux h acc =
+  let rec aux h =
     match h with
-    | [] -> List.rev acc
-    | n :: t -> aux t (complement n :: acc)
+    | [] -> []
+    | n :: t -> complement n :: aux t
   in
-  aux h []
+  aux h
 
 type rna = nucleobase list
 
 let generate_rna h =
   let to_rna_base = function
-    | A -> T
-    | T -> U
-    | C -> G
-    | G -> C
-    | _ -> None
+  | A -> T
+  | T -> U
+  | C -> G
+  | G -> C
+  | _ -> None
   in
-  let rec aux h acc =
+  let rec aux h =
     match h with
-    | [] -> List.rev acc
-    | n :: t -> aux t (to_rna_base n.nucleobase :: acc)
+    | [] -> []
+    | n :: t -> to_rna_base n.nucleobase :: aux t
   in
-  aux h []
+  aux h
 
 let () =
   Random.self_init ();
   let h = generate_helix 10 in
   Printf.printf "helix: %s\n" (helix_to_string h);
   let r = generate_rna h in
-  List.iter (fun b -> print_string (string_of_nucleobase b)) r;
+  let rec print_rna = function
+    | [] -> ()
+    | b :: t -> print_string (string_of_nucleobase b); print_rna t
+  in
+  print_rna r;
   print_char '\n'
