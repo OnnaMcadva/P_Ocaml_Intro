@@ -20,20 +20,10 @@ let crossover lst1 lst2 =
 
 let () =
   let r1 = crossover [1; 2; 3; 4] [2; 4; 6] in
+  List.iter (fun x -> Printf.printf "%d " x) r1;
+  print_char '\n';
   let r2 = crossover ['a'; 'b'; 'c'] ['b'; 'c'; 'd'] in
+  List.iter (fun x -> Printf.printf "%c " x) r2;
+  print_char '\n';
   let r3 = crossover [] [1; 2; 3] in
-  let rec print_ints = function
-    | [] -> print_char '\n'
-    | h :: t -> Printf.printf "%d " h; print_ints t
-  in
-  let rec print_chars = function
-    | [] -> print_char '\n'
-    | h :: t -> Printf.printf "%c " h; print_chars t
-  in
-  let rec my_length = function
-    | [] -> 0
-    | _ :: t -> 1 + my_length t
-  in
-  print_ints r1;
-  print_chars r2;
-  Printf.printf "empty: %d elements\n" (my_length r3)
+  Printf.printf "empty: %d elements\n" (List.length r3)
