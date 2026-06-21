@@ -30,7 +30,10 @@ let () =
     | [] -> print_char '\n'
     | h :: t -> Printf.printf "%c " h; print_chars t
   in
+  let rec my_length = function
+    | [] -> 0
+    | _ :: t -> 1 + my_length t
+  in
   print_ints r1;
   print_chars r2;
-  Printf.printf "empty: %d elements\n" (List.length r3)
-  
+  Printf.printf "empty: %d elements\n" (my_length r3)
