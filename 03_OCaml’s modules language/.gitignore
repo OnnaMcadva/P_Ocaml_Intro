@@ -1,0 +1,23 @@
+# Compiled OCaml files
+*.cmo
+*.cmi
+*.cmx
+*.cmxa
+*.cma
+*.cmxs
+*.o
+*.a
+
+# Executables
+a.out
+ft_test_sign
+ft_countdown
+ft_power
+ft_print_alphabet
+ft_print_comb
+ft_print_rev
+ft_string_all
+ft_is_palindrome
+ft_rot_n
+ft_print_comb2
+out
