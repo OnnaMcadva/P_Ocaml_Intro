@@ -1,0 +1,5 @@
+Why did the OCaml developer break up with the imperative programmer? Too many side effects.
+I told my computer I needed a break, and now it won't stop sending me KitKats.
+Why do programmers prefer dark mode? Because light attracts bugs.
+A SQL query walks into a bar, walks up to two tables and asks: "Can I join you?"
+Why was the array sad? Because it had too many empty elements and no one appreciated its length.
