@@ -101,7 +101,7 @@ let () =
     ) 0 test_set in
     let total = List.length test_set in
     let accuracy = 100.0 *. (float_of_int correct) /. (float_of_int total) in
-    Printf.printf "\n--- Accuracy on ionosphere test set (K=%d) ---\n" k;
+    Printf.printf "\n\x1b[4;32m<> Accuracy on ionosphere test set (K=%d) <>\x1b[0m\n" k;
     Printf.printf "Correct: %d / %d\n" correct total;
     Printf.printf "Accuracy: %.2f%%\n" accuracy
   end else

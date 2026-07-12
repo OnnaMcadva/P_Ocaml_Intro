@@ -9,7 +9,7 @@ let set r new_value = r.contents <- new_value
 let bind r f = f r.contents
 
 let () =
-  print_endline "--- Testing ft_ref ---";
+  print_endline "\x1b[4;32m<> Testing ft_ref <>\x1b[0m";
   let r = return 42 in
   Printf.printf "Initial value: %d\n" (get r);
   
