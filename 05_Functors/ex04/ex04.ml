@@ -5,18 +5,16 @@ module type VAL = sig
 end
 
 module type MAKEEVALEXPR = functor (V : VAL) -> sig
-  type t = V.t
   type expr =
-    | Value of t
+    | Value of V.t
     | Add of expr * expr
     | Mul of expr * expr
-  val eval : expr -> t
+  val eval : expr -> V.t
 end
 
 module MakeEvalExpr : MAKEEVALEXPR = functor (V : VAL) -> struct
-  type t = V.t
   type expr =
-    | Value of t
+    | Value of V.t
     | Add of expr * expr
     | Mul of expr * expr
 
@@ -53,13 +51,13 @@ module StringVal : VAL with type t = string = struct
   let mul = ( ^ )
 end
 
-module IntEvalExpr : EVALEXPR with type t = int =
+module IntEvalExpr : EVALEXPR with type t := int =
   MakeEvalExpr (IntVal)
 
-module FloatEvalExpr : EVALEXPR with type t = float =
+module FloatEvalExpr : EVALEXPR with type t := float =
   MakeEvalExpr (FloatVal)
 
-module StringEvalExpr : EVALEXPR with type t = string =
+module StringEvalExpr : EVALEXPR with type t := string =
   MakeEvalExpr (StringVal)
 
 let ie = IntEvalExpr.Add (IntEvalExpr.Value 40, IntEvalExpr.Value 2)
