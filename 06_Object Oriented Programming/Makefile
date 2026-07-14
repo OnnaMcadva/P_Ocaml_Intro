@@ -16,7 +16,7 @@ all: $(EXERCISES) camel
 
 $(EXERCISES):
 	@echo "$(CYAN)$(BOLD)Compiling $@...$(DEF)"
-	@srcs="$(notdir $(wildcard $@/*.mli)) $(notdir $(filter-out %/main.ml,$(wildcard $@/*.ml))) $(notdir $(filter %/main.ml,$(wildcard $@/*.ml)))"; \
+	@srcs="$(notdir $(wildcard $@/*.mli)) $(notdir $(wildcard $@/people.ml)) $(notdir $(wildcard $@/doctor.ml)) $(notdir $(wildcard $@/main.ml))"; \
 	if [ -n "$$(echo $$srcs | xargs)" ]; then \
 		cd $@ && $(OCAMLOPT) $$srcs -o out \
 			&& echo "$(GREEN)  [ OK ] $@$(DEF)" \
