@@ -1,36 +1,23 @@
 let () =
-  Random.self_init ();
-  let human = new people "Rose" in
-  let dalek = new dalek () in
-  let doc = new doctor "The Doctor" 900 human in
+  print_endline "--- Testing Exercise 02: Dalek Battle ---";
+  let human = new People.people "Mickey Smith" in
+  let doc = new Doctor.doctor "The 11th Doctor" 1100 human in
+  let enemy = new Dalek.dalek in
 
-  print_endline "=== Initial state ===";
-  print_endline (human#to_string);
-  print_endline (dalek#to_string);
-  print_endline (doc#to_string);
-
-  print_endline "=== Dalek talks ===";
-  dalek#talk;
-
-  print_endline "=== Dalek exterminates human ===";
-  dalek#exterminate human;
-  print_endline (human#to_string);
-  print_endline (dalek#to_string);
-
-  print_endline "=== Doctor talks ===";
-  doc#talk;
-
-  print_endline "=== Doctor travels in time ===";
-  doc#travel_in_time 2000 2022;
-  print_endline (doc#to_string);
-
-  print_endline "=== Doctor uses sonic screwdriver ===";
-  doc#use_sonic_screwdriver;
-
-  print_endline "=== Doctor heals ===";
-  doc#heal;
-  print_endline (doc#to_string);
-
-  print_endline "=== Dalek dies ===";
-  dalek#die
+  print_endline enemy#to_string;
   
+  print_endline "\n--- Dalek speaks ---";
+  enemy#talk;
+  enemy#talk;
+
+  print_endline "\n--- Battle begins ---";
+  doc#talk;
+  enemy#exterminate human;
+  
+  print_endline "\n--- Dalek status after extermination (shield should flip) ---";
+  print_endline enemy#to_string;
+
+  print_endline "\n--- Doctor fights back ---";
+  doc#use_sonic_screwdriver;
+  enemy#die;
+  print_endline "--- End of Test ---"
