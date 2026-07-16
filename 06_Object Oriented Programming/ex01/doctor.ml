@@ -25,7 +25,7 @@ class doctor (name_param : string) (age_param : int) (sidekick_param : People.pe
       print_endline "           _  _";
       print_endline "          | || |";
       print_endline "   _______| || |_______";
-      print_endline "  /___________________\\";
+      print_endline "  /____________________\\";
       print_endline "  |  ___  |  _  |  ___  |";
       print_endline "  | |   | | | | | |   | |";
       print_endline "  | |___| | |_| | |___| |";

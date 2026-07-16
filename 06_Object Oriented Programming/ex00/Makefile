@@ -5,7 +5,7 @@ INTERFACE = $(SOURCES:.ml=.cmi)
 O_FILES = $(SOURCES:.ml=.o)
 
 CAMLC = ocamlopt
-FLAGS = -w -all
+FLAGS = -w -a
 
 all: $(NAME)
 
