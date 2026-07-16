@@ -1,5 +1,7 @@
 let () =
-  let p = new People.people "Rose" in
-  print_endline (p#to_string);
-  p#talk;
-  p#die
+  print_endline "--- Testing Exercise 00: People ---";
+  let Rose = new People.people "Rose Tyler" in
+  print_endline Rose#to_string;
+  Rose#talk;
+  Rose#die;
+  print_endline "--- End of Test ---"
