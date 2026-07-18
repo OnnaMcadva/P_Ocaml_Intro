@@ -1,28 +1,41 @@
-OCAMLOPT	= ocamlopt
-EXERCISES	= ex00 ex01 ex02 ex03 ex04 ex05
+OCAMLOPT    = ocamlopt
+EXERCISES   = ex00 ex01 ex02 ex03 ex04 ex05
 
 # Colors
-DEF		= \033[0m
-BOLD		= \033[1m
-RED		= \033[1;91m
-GREEN		= \033[1;92m
-CYAN		= \033[1;96m
-PINK		= \033[38;5;206m
-YELLOW		= \033[38;5;226m
-SAND		= \033[38;5;222m
-BLUE		= \033[38;5;117m
+DEF         = \033[0m
+BOLD        = \033[1m
+RED         = \033[1;91m
+GREEN       = \033[1;92m
+CYAN        = \033[1;96m
+PINK        = \033[38;5;206m
+YELLOW      = \033[38;5;226m
+SAND        = \033[38;5;222m
+BLUE        = \033[38;5;117m
 
 all: $(EXERCISES) camel
 
 $(EXERCISES):
 	@echo "$(CYAN)$(BOLD)Compiling $@...$(DEF)"
-	@srcs="$(notdir $(wildcard $@/*.mli)) $(notdir $(filter-out %/main.ml,$(wildcard $@/*.ml))) $(notdir $(filter %/main.ml,$(wildcard $@/*.ml)))"; \
-	if [ -n "$$(echo $$srcs | xargs)" ]; then \
-		cd $@ && $(OCAMLOPT) $$srcs -o out \
-			&& echo "$(GREEN)  [ OK ] $@$(DEF)" \
-			|| echo "$(RED)  [FAIL] $@$(DEF)"; \
+	@ml_files=$$(ls $@/*.ml 2>/dev/null || true); \
+	mli_files=$$(ls $@/*.mli 2>/dev/null || true); \
+	if [ -z "$$ml_files" ] && [ -z "$$mli_files" ]; then \
+		echo "$(YELLOW)  [SKIP] $@ has no ML sources$(DEF)"; \
+		exit 0; \
+	fi; \
+	ordered_files=$$( (echo "$$mli_files"; echo "$$ml_files") | xargs ocamldep -sort 2>/dev/null || echo "$$ml_files" ); \
+	if [ -z "$$ordered_files" ]; then \
+		echo "$(RED)  [ERROR] No files to compile after sorting$(DEF)"; \
+		exit 1; \
+	fi; \
+	if [ "$@" = "ex00" ]; then \
+			$(OCAMLOPT) -I $@ -I +unix unix.cmxa $$ordered_files -o $@/out; \
+		else \
+			$(OCAMLOPT) -I $@ $$ordered_files -o $@/out; \
+		fi; \
+	if [ $$? -eq 0 ]; then \
+		echo "$(GREEN)  [ OK ] $@$(DEF)"; \
 	else \
-		echo "$(YELLOW)  [SKIP] $@ has no ML sources yet$(DEF)"; \
+		echo "$(RED)  [FAIL] $@$(DEF)"; \
 	fi
 
 camel:
@@ -57,7 +70,7 @@ run:
 	@for ex in $(EXERCISES); do \
 		if [ -f $$ex/out ]; then \
 			echo "$(PINK)$(BOLD)=== $$ex ===$(DEF)"; \
-			$$ex/out; \
+			(cd $$ex && ./out); \
 			echo ""; \
 		fi \
 	done
@@ -76,4 +89,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all run clean fclean re $(EXERCISES) camel
+.PHONY: all run clean fclean re camel $(EXERCISES)
