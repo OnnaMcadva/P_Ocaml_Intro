@@ -1,0 +1,92 @@
+OCAMLOPT    = ocamlopt
+EXERCISES   = ex00 ex01 ex02 ex03 ex04
+
+# Colors
+DEF         = \033[0m
+BOLD        = \033[1m
+RED         = \033[1;91m
+GREEN       = \033[1;92m
+CYAN        = \033[1;96m
+PINK        = \033[38;5;206m
+YELLOW      = \033[38;5;226m
+SAND        = \033[38;5;222m
+BLUE        = \033[38;5;117m
+
+all: $(EXERCISES) camel
+
+$(EXERCISES):
+	@echo "$(CYAN)$(BOLD)Compiling $@...$(DEF)"
+	@ml_files=$$(ls $@/*.ml 2>/dev/null || true); \
+	mli_files=$$(ls $@/*.mli 2>/dev/null || true); \
+	if [ -z "$$ml_files" ] && [ -z "$$mli_files" ]; then \
+		echo "$(YELLOW)  [SKIP] $@ has no ML sources$(DEF)"; \
+		exit 0; \
+	fi; \
+	ordered_files=$$( (echo "$$mli_files"; echo "$$ml_files") | xargs ocamldep -sort 2>/dev/null || echo "$$ml_files" ); \
+	if [ -z "$$ordered_files" ]; then \
+		echo "$(RED)  [ERROR] No files to compile after sorting$(DEF)"; \
+		exit 1; \
+	fi; \
+	if [ "$@" = "ex00" ]; then \
+			$(OCAMLOPT) -I $@ -I +unix unix.cmxa $$ordered_files -o $@/out; \
+		else \
+			$(OCAMLOPT) -I $@ $$ordered_files -o $@/out; \
+		fi; \
+	if [ $$? -eq 0 ]; then \
+		echo "$(GREEN)  [ OK ] $@$(DEF)"; \
+	else \
+		echo "$(RED)  [FAIL] $@$(DEF)"; \
+	fi
+
+camel:
+	@echo ""
+	@echo "$(SAND)$(BOLD)  '\|/'                                  $(YELLOW)*$(DEF)"
+	@echo "$(SAND)$(BOLD) -- $(YELLOW)*$(SAND) -----$(DEF)"
+	@echo "$(SAND)$(BOLD)   /|\\      ____$(DEF)"
+	@echo "$(SAND)$(BOLD)  ' | '    {_   o^>       $(YELLOW)*$(DEF)"
+	@echo "$(SAND)$(BOLD)    :        -_  /)$(DEF)"
+	@echo "$(SAND)$(BOLD)    :         (   (        $(GREEN).-''\`'.$(DEF)"
+	@echo "$(SAND)$(BOLD)    .          \\   \\      $(GREEN)/       \ \$(DEF)"
+	@echo "$(SAND)$(BOLD)    .           \\    \\   $(GREEN)/         \ \$(DEF)"
+	@echo "$(SAND)$(BOLD)                 \\    \`-'$(GREEN)           \`'.$(DEF)"
+	@echo "$(SAND)$(BOLD)                  \\    . '        /    \`.$(DEF)"
+	@echo "$(SAND)$(BOLD)                   \\  ( \\  )     (     .')$(DEF)"
+	@echo "$(SAND)$(BOLD)    ,,   t          '. |  /       |     ($(DEF)"
+	@echo "$(SAND)$(BOLD)   '|\`\`_/^\\___        '|  |\`'-..-'|   ( ()$(DEF)"
+	@echo "$(BLUE)$(BOLD)_~~|~/_|_|__/|~~~~~~~~ |  / ~~~~~ |   | ~~~~~~~~$(DEF)"
+	@echo "$(SAND)$(BOLD) -_  |L[|]L|/          | |\\ $(GREEN) 42 $(SAND)  )   )$(DEF)"
+	@echo "$(BLUE)$(BOLD)                       ( |(       /  /|$(DEF)"
+	@echo "$(BLUE)$(BOLD)   ~~ ~  ~~ ~~~~       | /\\\      / /| |$(DEF)"
+	@echo "$(BLUE)$(BOLD)                       ||  \\\\   _/ / | |$(DEF)"
+	@echo "$(SAND)$(BOLD)             ~ ~~ ~~~ _|| (_/ (___)_| |$(DEF)"
+	@echo "$(SAND)$(BOLD)                     (__)         (____)$(DEF)"
+	@echo ""
+	@echo "$(BOLD)$(CYAN)<><><><><><><><><><><><><><><><><><><><><><><><><><><>$(DEF)"
+	@echo "$(BOLD)$(GREEN)  OCaml module M&M compiled! Run 'make run' to test.$(DEF)"
+	@echo "$(BOLD)$(CYAN)<><><><><><><><><><><><><><><><><><><><><><><><><><><>$(DEF)"
+	@echo ""
+
+run:
+	@for ex in $(EXERCISES); do \
+		if [ -f $$ex/out ]; then \
+			echo "$(PINK)$(BOLD)=== $$ex ===$(DEF)"; \
+			(cd $$ex && ./out); \
+			echo ""; \
+		fi \
+	done
+
+clean:
+	@echo "$(RED)$(BOLD)Cleaning compiled files...$(DEF)"
+	@for ex in $(EXERCISES); do \
+		rm -f $$ex/*.cmo $$ex/*.cmi $$ex/*.cmx $$ex/*.cmxa $$ex/*.o $$ex/*.a; \
+	done
+
+fclean: clean
+	@echo "$(RED)$(BOLD)Removing executables...$(DEF)"
+	@for ex in $(EXERCISES); do \
+		rm -f $$ex/out $$ex/a.out; \
+	done
+
+re: fclean all
+
+.PHONY: all run clean fclean re camel $(EXERCISES)
