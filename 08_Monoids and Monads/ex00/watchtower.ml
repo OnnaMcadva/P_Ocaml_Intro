@@ -1,17 +1,24 @@
-module Watchtower =
-struct
-  type hour = int
-  
-  let zero : hour = 12
+module Watchtower :
+  sig
+    type hour = int
+    val zero : hour
+    val add : hour -> hour -> hour
+    val sub : hour -> hour -> hour
+  end =
 
-  let add (h1 : hour) (h2 : hour) : hour =
-    let res = (h1 + h2) mod 12 in
-    if res = 0 then 12 else if res < 0 then res + 12 else res
+  struct
+    type hour = int
+    
+    let zero : hour = 12
 
-  let sub (h1 : hour) (h2 : hour) : hour =
-    let res = (h1 - h2) mod 12 in
-    if res = 0 then 12 else if res < 0 then res + 12 else res
-end
+    let add (h1 : hour) (h2 : hour) : hour =
+      let res = (h1 + h2) mod 12 in
+      if res = 0 then 12 else if res < 0 then res + 12 else res
+
+    let sub (h1 : hour) (h2 : hour) : hour =
+      let res = (h1 - h2) mod 12 in
+      if res = 0 then 12 else if res < 0 then res + 12 else res
+  end
 
 let () =
 

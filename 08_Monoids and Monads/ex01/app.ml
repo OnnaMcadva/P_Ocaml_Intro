@@ -1,32 +1,40 @@
-module App =
-struct
-  type project = string * string * int
+module App :
+  sig
+    type project = string * string * int
+    val zero : project
+    val combine : project -> project -> project
+    val fail : project -> project
+    val success : project -> project
+  end =
 
-  let zero : project = ("", "", 0)
+  struct
+    type project = string * string * int
 
-  let combine (p1 : project) (p2 : project) : project =
-    let (n1, s1, g1) = p1 in
-    let (n2, s2, g2) = p2 in
-    if p1 = zero then p2
-    else if p2 = zero then p1
-    else
-      let new_name = if n1 = "" then n2 else if n2 = "" then n1 else n1 ^ " " ^ n2 in
-      let avg_grade = (g1 + g2) / 2 in
-      let new_status = if avg_grade > 80 then "succeed" else "failed" in
-      (new_name, new_status, avg_grade)
+    let zero : project = ("", "", 0)
 
-  let fail (p : project) : project =
-    let (name, _, _) = p in
-    (name, "failed", 0)
+    let combine (p1 : project) (p2 : project) : project =
+      let (n1, s1, g1) = p1 in
+      let (n2, s2, g2) = p2 in
+      if p1 = zero then p2
+      else if p2 = zero then p1
+      else
+        let new_name = if n1 = "" then n2 else if n2 = "" then n1 else n1 ^ " " ^ n2 in
+        let avg_grade = (g1 + g2) / 2 in
+        let new_status = if avg_grade > 80 then "succeed" else "failed" in
+        (new_name, new_status, avg_grade)
 
-  let success (p : project) : project =
-    let (name, _, _) = p in
-    (name, "succeed", 80)
-end
+    let fail (p : project) : project =
+      let (name, _, _) = p in
+      (name, "failed", 0)
 
-let print_proj (p : App.project) : unit =
-  let (name, status, grade) = p in
-  Printf.printf "Project [Name: %S, Status: %S, Grade: %d]\n" name status grade
+    let success (p : project) : project =
+      let (name, _, _) = p in
+      (name, "succeed", 80)
+  end
+
+  let print_proj (p : App.project) : unit =
+    let (name, status, grade) = p in
+    Printf.printf "Project [Name: %S, Status: %S, Grade: %d]\n" name status grade
 
 let () =
 
